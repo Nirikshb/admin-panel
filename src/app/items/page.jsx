@@ -8,7 +8,7 @@ export default function ItemsPage() {
   return (
     <div style={{ padding: '20px' }}>
       <h1>Items Listing</h1>
-
+    
       <button
         onClick={() => router.push('/items/new')}
         style={{ marginRight: '10px' }}
