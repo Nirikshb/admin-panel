@@ -1,57 +1,67 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import useStore from '@/store/useStore';
 
 async function createItem(data) {
-  console.log('Data',data);
-  
+  console.log('Data', data);
+
 }
+// const mutation = useMutation({
+//   mutationFn: createItem,
+//   onSuccess: () => {
+//     queryClient.invalidateQueries({ queryKey: ['items'] });
+//     router.push('/items');
+//   },
+// });
 
 export default function CreateItemPage() {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
   const queryClient = useQueryClient();
   const router = useRouter();
-
-  const mutation = useMutation({
-    mutationFn: createItem,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['items'] });
-      router.push('/items');
-    },
-  });
+  const { name, description, setName, setDescription, submitForm, resetForm } = useStore();
+  const handleSubmit = (e) => {
+    submitForm()
+  };
 
   return (
     <div style={{ padding: '20px' }}>
       <h1>Create New Item</h1>
 
       <div>
-        <label>Name:</label>
-        <input value={name} onChange={(e) => setName(e.target.value)} />
+        <Label>Name</Label>
+        <Input
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
       </div>
 
       <div>
-        <label>Description:</label>
-        <input
+        <Label>Description:</Label>
+        <Input
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
       </div>
 
-      <button
-        onClick={() => mutation.mutate({ name, description })}
-        disabled={mutation.isPending}
+      <Button
+        // onClick={() => mutation.mutate({ name, description })}
+        onClick={handleSubmit}
+      // disabled={mutation.isPending}
       >
-        {mutation.isPending ? 'Saving...' : 'Save'}
-      </button>
+        Saving
+        {/* {mutation.isPending ? 'Saving...' : 'Save'} */}
+      </Button>
 
-      <button onClick={() => router.back()} style={{ marginLeft: '10px' }}>
+      <Button onClick={() => router.back()} style={{ marginLeft: '10px' }}>
         Cancel
-      </button>
+      </Button>
 
-      {mutation.isError && <p style={{ color: 'red' }}>Error saving item</p>}
+      {/* {mutation.isError && <p style={{ color: 'red' }}>Error saving item</p>} */}
     </div>
   );
 }
